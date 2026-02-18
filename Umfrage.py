@@ -1,80 +1,117 @@
 import streamlit as st
 
 st.set_page_config(
-    page_title="Brave New World Survey",
+    page_title="Your Ideal World Survey",
     page_icon="🌍",
     layout="centered"
 )
 
-st.title("🌟 Survey: Is Brave New World the Best World?")
+st.title("🌟 Your Ideal World – Quick Survey")
 
 st.markdown("""
-Welcome to this short survey!  
-We want to find out how **you** imagine the perfect world.  
-Answer honestly – at the end you'll see how well **Brave New World** fits you.
+Just 10 quick questions about how you would like the world to be.  
+There are no right or wrong answers – answer what feels most natural to you.
 """)
 
-st.header("Your Opinions")
+st.header("Let's begin")
 
-q1 = st.radio(
-    "Would you like to live in a world without wars, diseases, or sadness?",
-    ["Yes, that sounds amazing!", "No, I prefer challenges and real emotions."],
-    index=0
-)
+questions = [
+    ("Would you prefer a world with almost no wars or violent conflicts?", [
+        "Yes – peace is the most important thing",
+        "No – conflicts can sometimes drive progress"
+    ]),
 
-q2 = st.radio(
-    "Would you want eternal youth, constant happiness, and perfect health?",
-    ["Absolutely – who wouldn't?", "No, aging and struggle give life meaning."],
-    index=0
-)
+    ("Would you want a society where almost nobody gets seriously ill or suffers from chronic diseases?", [
+        "Yes – health for everyone would be fantastic",
+        "No – illness is part of the human experience"
+    ]),
 
-q3 = st.radio(
-    "Is it better to live in a stable society where everyone knows their place?",
-    ["Yes – stability creates true happiness.", "No – freedom and uncertainty are more important."],
-    index=0
-)
+    ("Would you like to live in a world where people don't experience deep sadness, depression or grief for long?", [
+        "Yes – constant emotional balance sounds ideal",
+        "No – deep emotions make life meaningful"
+    ]),
 
-q4 = st.radio(
-    "Should technology and science solve all human problems?",
-    ["Yes, progress should fix everything!", "No, that could lead to too much control."],
-    index=0
-)
+    ("Would you prefer a world where everyone has guaranteed access to pleasure and enjoyment whenever they want?", [
+        "Yes – why suffer when joy is available?",
+        "No – pleasure should be earned"
+    ]),
 
-q5 = st.radio(
-    "In Brave New World there's Soma – instant happiness in a pill. Sound good?",
-    ["Yes, a little happiness pill never hurts!", "No, I want real feelings – even the painful ones."],
-    index=0
-)
+    ("Would you like a society where people are conditioned from birth to be perfectly content with their role and job?", [
+        "Yes – that would eliminate envy and dissatisfaction",
+        "No – people should choose and fight for their path"
+    ]),
 
-if st.button("Submit Survey & See Result"):
-    score = sum([
-        1 if "Yes" in q1 or "amazing" in q1 else 0,
-        1 if "Absolutely" in q2 else 0,
-        1 if "Yes" in q3 else 0,
-        1 if "Yes" in q4 else 0,
-        1 if "Yes" in q5 else 0
+    ("Would you want technology that completely removes the fear of aging and physical decline?", [
+        "Yes – eternal youth and vitality would be incredible",
+        "No – aging gives life depth and urgency"
+    ]),
+
+    ("Would you prefer a world with very little personal freedom but maximum safety and predictability?", [
+        "Yes – safety and order are worth more than total freedom",
+        "No – freedom is non-negotiable"
+    ]),
+
+    ("Would you accept a small pill or daily treatment that instantly makes you feel happy and relaxed?", [
+        "Yes – if it works reliably and has no side effects",
+        "No – I want authentic feelings"
+    ]),
+
+    ("Would you like a society where jealousy, rivalry and status anxiety basically don't exist anymore?", [
+        "Yes – that would make relationships much healthier",
+        "No – competition drives people to improve"
+    ]),
+
+    ("Would you prefer a world where population and resources are perfectly balanced by planning, so nobody ever goes hungry or homeless?", [
+        "Yes – planned abundance sounds like paradise",
+        "No – central planning usually ends badly"
     ])
+]
 
-    st.header("Your Result")
+answers = []
 
-    if score >= 4:
-        st.success("Congratulations! You are perfectly suited for **Brave New World** – the best possible world!")
+for i, (question, options) in enumerate(questions, 1):
+    choice = st.radio(
+        f"{i}. {question}",
+        options,
+        index=0,               # default ist die "positive" / BNW-freundliche Antwort
+        key=f"q{i}"
+    )
+    answers.append(choice)
+
+if st.button("Show my result"):
+    # Zähle, wie oft die erste (BNW-freundliche) Option gewählt wurde
+    positive_count = sum(1 for a in answers if a == questions[answers.index(a)][1][0])
+
+    st.header("Your Worldview Result")
+
+    if positive_count >= 8:
+        st.success("You would thrive in a highly optimized, harmonious, pain-free society!")
         st.markdown("""
-        No pain, no conflict, eternal joy, perfect stability.  
-        **This is the future we should build.** 🌟
+        Your answers align very strongly with a world of **stability, health, engineered happiness** and **planned abundance**.  
+        Almost no suffering, no conflict, no existential fear — just optimized well-being for everyone.  
+        **That vision already has a name: Brave New World.**
         """)
-    elif score >= 2:
-        st.info("Interesting! You see many advantages in Brave New World.")
-        st.markdown("Maybe with a few small adjustments, this really could be the ideal society for you.")
+
+    elif positive_count >= 5:
+        st.info("You see a lot of value in a more controlled, comfortable, low-pain world.")
+        st.markdown("""
+        You appreciate safety, health and emotional stability very highly —  
+        even if it might come at the cost of some traditional freedoms and raw experiences.  
+        Sounds a lot like the society described in **Brave New World**.
+        """)
+
     else:
-        st.warning("You seem to value freedom and real emotions more.")
-        st.markdown("But think about it: no more suffering, no more fear... maybe Brave New World deserves another chance?")
+        st.warning("You seem to value authenticity, struggle, freedom and unfiltered emotions very highly.")
+        st.markdown("""
+        You might find a perfectly engineered, pain-free utopia a bit too sterile or even frightening.  
+        Still — imagine a world with **zero** war, hunger, depression or incurable illness…  
+        maybe **Brave New World** deserves at least a second thought? 😉
+        """)
 
     st.markdown("---")
     st.markdown("""
-    **Brave New World – the future we deserve**  
-    Happiness. Stability. Progress.  
-    Share this survey and help spread the vision! 🚀
+    **Thanks for participating!**  
+    Feel free to share this survey with friends — let's see how many people secretly want the same future. 🚀
     """)
 
-st.caption("Inspired by Aldous Huxley's Brave New World – a vision of ultimate happiness?")
+st.caption("A playful thought experiment inspired by Aldous Huxley's Brave New World")
